@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+
+require File.join(LIBDIR, 'runner')
+
+runner = Clorun::Runner.new(ARGV)
+runner.run
+

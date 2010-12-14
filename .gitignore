@@ -1,0 +1,10 @@
+*.swp
+* swo
+
+templates/distr
+templates/ec2-env1
+templates/hudson
+templates/mike
+templates/rabbit
+templates/single
+templates/x2c
