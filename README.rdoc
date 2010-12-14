@@ -1,0 +1,8 @@
+== Clorun
+The tool for bootstrapping and installing software on Amazon EC2 in multithreaded fashion. It is used with Opscode Chef configuration framework. 
+Chef is used in 'solo' mode, no server is needed.
+Originally written to fully automate deployment of distributed applications and make it as simple as one click.
+Since tool knife has appeared in Chef (this utility was originally written before release), it's easier to use knife for many cases; still as of now Chef doesn't have a tool for one-click deployment of whole cluster in neither client-server nor solo mode.
+
+== Copyright
+Copyright (c) 2010 Mike Scherbakov. See LICENSE for details.
