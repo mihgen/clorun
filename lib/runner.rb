@@ -1,5 +1,5 @@
-# LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'rubygems'
+# LIBDIR = File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'net/scp'
 require 'ftools'
 require 'fileutils'
@@ -10,7 +10,7 @@ require 'yaml/store'
 require File.join(LIBDIR, 'options')
 require File.join(File.dirname(__FILE__), 'amazon')
 
-DEBUG=:yes
+DEBUG=:no
 
 class Hash
   def method_missing(meth, *args, &block)
