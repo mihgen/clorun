@@ -62,7 +62,7 @@ private
     
     def deploy
 
-      fatal("The environment with name '#{@options.name}' already exist. Exiting.") if File.exist?(@env_dir)
+      fatal("The environment with name '#{@options.name}' already exists. Exiting.") if File.exist?(@env_dir)
       Dir.mkdir(@env_dir)
       File.copy(File.join(@templ_dir, "solo.rb"), @env_dir)
       chef_tar_file = File.join(@templ_dir, "chef.tar.gz")
@@ -178,14 +178,20 @@ private
     def configure_hosts(ip, key, name)
       system("ssh-keygen -R " + ip)
       Net::SSH.start(ip, 'root', :keys => key) do |ssh|
-        ssh.exec! "gem install --no-ri --no-rdoc ohai chef --source http://gems.opscode.com --source http://gems.rubyforge.org"
+        #ssh.exec! "gem update --system && gem install --no-ri --no-rdoc ohai chef --source http://gems.opscode.com --source http://gems.rubyforge.org"
+        # Hacks to distributive because of bug https://bugzilla.redhat.com/show_bug.cgi?id=634380
+        ssh.exec! "rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-4.noarch.rpm"
+        ssh.exec! "rpm -Uvh http://download.elff.bravenet.com/5/i386/elff-release-5-3.noarch.rpm"
+        ssh.exec! "rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-ELFF; yum -y install ruby ruby-shadow ruby-ri ruby-rdoc gcc gcc-c++ ruby-devel ruby-static"
+        ssh.exec! "yum -y install chef"
+        #ssh.exec! "echo Y | gem uninstall json; gem instal json -v1.4.5"
         files = ["#{name}.json", "solo.rb"]
         files << "chef.tar.gz" unless @cfg.chef_cooks_url
         puts "Files to upload: " + files.join(',')
         files.each do |file|
           ssh.scp.upload! File.join(@env_dir, file), '/root/'
         end
-        ssh.exec!("wget -c -T 7 --tries=7 -o wget.log http://myserver/cooks.tar.gz && tar -xzf cooks.tar.gz -C /root")
+        #ssh.exec!("wget -c -T 7 --tries=7 -o wget.log http://myserver/cooks.tar.gz && tar -xzf cooks.tar.gz -C /root")
         ssh.exec!("wget -c -T 7 --tries=7 -a wget.log #{@cfg.chef_cooks_url}") if @cfg.chef_cooks_url
         ssh.exec!("tar -xzf /root/chef.tar.gz -C /root")
         puts ssh.exec!("/usr/bin/chef-solo -c /root/solo.rb -j /root/#{name}.json")

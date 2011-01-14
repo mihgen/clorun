@@ -19,7 +19,7 @@ module Clorun
         opts.on("-t", "--target TARGET", [:deploy, :test, :term, :reconf, :all], "Target usage (deploy|test|term|all)") do |t|
           @target = t
         end
-        opts.on("-c", "--config CONFIG_FOLDER", String, "Relative path of folder that contains config files (in cloud/config directory)") do |conf|
+        opts.on("-c", "--config TEMPLATES_FOLDER", String, "Relative path of folder that contains template files (in clorun/templates directory)") do |conf|
           @config = conf
         end
         opts.on("-n", "--name NAME", String, "Name of environment") do |name|
